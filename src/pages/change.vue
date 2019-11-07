@@ -2,7 +2,7 @@
     <div>
         <headpage></headpage>
         <menupage></menupage>
-        index
+        change
     </div>
 </template>
 <script>

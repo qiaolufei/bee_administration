@@ -2,7 +2,7 @@
     <div>
         <headpage></headpage>
         <menupage></menupage>
-        index
+        vip
     </div>
 </template>
 <script>
