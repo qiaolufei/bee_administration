@@ -4,7 +4,7 @@
         <menupage></menupage>
         <div class="setMeal">
           <div class="setMeal__options">
-            <el-button type="primary" @click="addNew()" icon="el-icon-plus">新增</el-button>
+            <el-button type="primary" @click="dialogVisible = true" icon="el-icon-plus">新增</el-button>
           </div>
           <div class="setMeal__list">
              <el-table
@@ -51,6 +51,41 @@
               </el-table>
           </div>
         </div>
+        <!-- 新增套餐 -->
+        <el-dialog
+          title="新增套餐"
+          :visible.sync="dialogVisible"
+          width="40%"
+          :before-close="handleClose">
+          套餐类型:<el-select v-model="type" placeholder="套餐类型">
+            <el-option
+              v-for="item in typeOptions"
+              :key="item.value"
+              :label="item.value"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <br>
+          <el-cascader
+            class="mar"
+            v-model="card.shop"
+            v-show="type == '时间卡'"
+            :options="shopOptions"
+            placeholder="选择地址"
+            :props="{ expandTrigger: 'hover' }"
+            @change="handleChange"></el-cascader>
+          <el-input class="mar" v-model="card.name" placeholder="套餐名称"></el-input>
+          <el-input class="mar" v-model="card.money" placeholder="价格"></el-input>
+          <el-input class="mar" v-show="type == '时间卡'" v-model="card.time" placeholder="天数"></el-input>
+          <el-input class="mar" v-show="type == '储值卡'" v-model="card.price" placeholder="充值金额"></el-input>
+          <el-input class="mar" v-model="card.grade" placeholder="增加积分"></el-input>
+          <el-input class="mar" v-model="card.area" placeholder="可使用区域"></el-input>
+          <el-input class="mar" v-model="card.info" placeholder="套餐描述"></el-input>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="addNew">确 定</el-button>
+          </span>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -70,7 +105,35 @@ export default {
           price: '260元',
           grades: '30'
         }
-      ]
+      ],
+      dialogVisible: false,
+      type: '储值卡',
+      typeOptions: [
+        {
+          value: '储值卡'
+        },
+        {
+          value: '时间卡'
+        }
+      ],
+      shopOptions: [{
+        value: '济南',
+        label: '济南',
+        children: [{
+          value: '山东大学店',
+          label: '山东大学店'
+        }]
+      }],
+      card: {
+        shop: '',
+        name: '',
+        time: '',
+        money: '',
+        price: '',
+        grade: '',
+        area: '',
+        info: ''
+      }
     }
   },
   methods: {

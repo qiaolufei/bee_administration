@@ -4,7 +4,7 @@
         <menupage></menupage>
         <div class="change">
           <div class="change__options">
-              <el-button type="primary" @click="addNew()" icon="el-icon-plus">新增</el-button>
+              <el-button type="primary" @click="dialogVisible = true" icon="el-icon-plus">新增</el-button>
           </div>
           <div class="change__list">
              <el-table
@@ -58,6 +58,39 @@
               </el-table>
           </div>
         </div>
+        <!-- 新增兑换码 -->
+        <el-dialog
+          title="新增兑换码"
+          :visible.sync="dialogVisible"
+          width="40%"
+          :before-close="handleClose">
+          兑换券类型:<el-select v-model="type" placeholder="兑换券类型">
+            <el-option
+              v-for="item in typeOptions"
+              :key="item.value"
+              :label="item.value"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <br>
+          <el-cascader
+            class="mar"
+            v-model="card.shop"
+            v-show="type == '时间卡'"
+            :options="shopOptions"
+            placeholder="选择地址"
+            :props="{ expandTrigger: 'hover' }"
+            @change="handleChange"></el-cascader>
+          <el-input class="mar" v-model="card.name" placeholder="兑换券名称"></el-input>
+          <el-input class="mar" v-show="type == '时间卡'" v-model="card.time" placeholder="天数"></el-input>
+          <el-input class="mar" v-show="type == '储值卡'" v-model="card.price" placeholder="充值金额"></el-input>
+          <el-input class="mar" v-model="card.grade" placeholder="增加积分"></el-input>
+          <el-input class="mar" v-model="card.area" placeholder="可使用区域"></el-input>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="addNew">确 定</el-button>
+          </span>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -77,12 +110,39 @@ export default {
         price: '30元',
         code: 'ASFSADFSFGG',
         state: '未兑换'
-      }]
+      }],
+      type: '储值卡',
+      typeOptions: [
+        {
+          value: '储值卡'
+        },
+        {
+          value: '时间卡'
+        }
+      ],
+      shopOptions: [{
+        value: '济南',
+        label: '济南',
+        children: [{
+          value: '山东大学店',
+          label: '山东大学店'
+        }]
+      }],
+      card: {
+        shop: '',
+        name: '',
+        time: '',
+        price: '',
+        grade: '',
+        area: ''
+      },
+      dialogVisible: false
     }
   },
   methods: {
     // 新增
     addNew () {},
+    handleClose () {},
     // 复制兑换码
     copy (index, row) {
       let copyData = row.code
@@ -108,5 +168,8 @@ export default {
     margin-top: 3%;
     margin-left: 81%;
   }
+}
+.mar{
+  margin-top: 1%;
 }
 </style>
